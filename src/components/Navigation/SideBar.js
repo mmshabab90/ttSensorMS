@@ -23,7 +23,7 @@ const SideBar = (props) => {
       <li>
         <NavLink
           to="/el-watch"
-          onClick={() => props.onSideNavItemClick("El-Watch Sensors")}
+          onClick={() => props.onSideNavItemClick("El-Watch")}
         >
           <i className="material-icons">fiber_smart_record</i> El-Watch Sensors
         </NavLink>

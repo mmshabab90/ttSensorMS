@@ -15,7 +15,7 @@ const TopBar = (props) => {
               <i className="material-icons">menu</i>
             </a>
 
-            <Link to="/" className="brand-logo black-text">
+            <Link to="/" className="brand-logo black-text title">
               {props.title}
             </Link>
           </div>
