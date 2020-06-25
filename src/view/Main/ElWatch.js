@@ -11,19 +11,16 @@ export default class ElWatch extends Component {
   };
 
   async componentDidMount() {
-    const data = [];
-    await db
-      .collection(elWatchCollection)
-      .get()
-      .then((querySnapshot) => {
-        const dT = querySnapshot.docs.map((doc) => doc.data());
-        //console.log(data);
-        data.push(dT);
-      });
+    let data = [];
+    await db.collection(elWatchCollection).onSnapshot((querySnapshot) => {
+      data = querySnapshot.docs.map((doc) => doc.data());
+      //console.log(data);
+      //data.push(dT);
+      this.setState({ sensorFirebaseData: data });
+    });
+    //.then();
 
-    console.log(data);
-
-    this.setState({ sensorFirebaseData: data[0] });
+    //console.log(data);
   }
 
   render() {
