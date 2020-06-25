@@ -4,17 +4,16 @@ import Dashboard from "./view/Main/Dashboard";
 import ElWatch from "./view/Main/ElWatch";
 
 const Router = (props) => {
-  const data = props.data;
   return (
     <Switch>
       <Route
         exact
         path="/"
-        render={(props) => <Dashboard {...props} data={data} />}
+        render={(props) => <Dashboard {...props} />}
       />
       <Route
         path="/el-watch"
-        render={(props) => <ElWatch {...props} data={data} />}
+        render={(props) => <ElWatch {...props} />}
       />
     </Switch>
   );

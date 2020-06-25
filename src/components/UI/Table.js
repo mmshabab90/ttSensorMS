@@ -15,6 +15,7 @@ export default class Table extends Component {
 
   render() {
     const { data } = this.props;
+
     return (
       <table className="responsive-table">
         <thead>
@@ -29,22 +30,18 @@ export default class Table extends Component {
         </thead>
 
         <tbody>
-          {data
-            .sort(function (a, b, index) {
-              return b.index - a.index;
-            })
-            .map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td>{index}</td>
-                  <td>{item.sensor_name}</td>
-                  {this.timestampToDate(item.timestamp)}
-                  {this.timestampToTime(item.timestamp)}
-                  <td>{item.sensor_value}</td>
-                  <td>{item.temperature}</td>
-                </tr>
-              );
-            })}
+          {data.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{item.sensor_name}</td>
+                {this.timestampToDate(item.timestamp)}
+                {this.timestampToTime(item.timestamp)}
+                <td>{item.sensor_value}</td>
+                <td>{item.temperature}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     );
