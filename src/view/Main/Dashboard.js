@@ -20,22 +20,35 @@ export default class Dashboard extends Component {
     this._isMounted = true;
 
     //firebase config and setup
-    await db
-      .collection(elWatchCollection)
-      .get()
-      .then((snapshot) => {
-        const sensorData = [];
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          sensorData.push(data);
-        });
-        //this.getData(sensorData);
-        if (this._isMounted) {
-          this.setState({ elData: sensorData, isLoading: false });
-          this.computeTime();
-        }
-      })
-      .catch((error) => console.log(error));
+    // await db
+    //   .collection(elWatchCollection)
+    //   .get()
+    //   .then((snapshot) => {
+    //     const sensorData = [];
+    //     snapshot.forEach((doc) => {
+    //       const data = doc.data();
+    //       sensorData.push(data);
+    //     });
+    //     //this.getData(sensorData);
+    //     if (this._isMounted) {
+    //       this.setState({ elData: sensorData, isLoading: false });
+    //       this.computeTime();
+    //     }
+    //   })
+    //   .catch((error) => console.log(error));
+
+    let data = [];
+    try {
+      await db.collection(elWatchCollection).onSnapshot((querySnapshot) => {
+        data = querySnapshot.docs.map((doc) => doc.data());
+        //console.log(data);
+        //data.push(dT);
+        this.setState({ elData: data, isLoading: false });
+        this.computeTime();
+      });
+    } catch (error) {
+      console.log("Couldn't connect to database | Error: " + error);
+    }
   }
 
   computeTime = () => {
@@ -66,6 +79,7 @@ export default class Dashboard extends Component {
       }
     }
   };
+  
   componentWillUnmount() {
     this._isMounted = false;
   }

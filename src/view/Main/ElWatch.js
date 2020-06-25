@@ -8,24 +8,42 @@ const elWatchCollection = "elWatchData";
 export default class ElWatch extends Component {
   state = {
     sensorFirebaseData: [],
+    isLoading: false,
   };
 
+  _isMounted = false;
+
   async componentDidMount() {
+    this.setState({ isLoading: true });
     let data = [];
+    this._isMounted = true;
+
     await db.collection(elWatchCollection).onSnapshot((querySnapshot) => {
       data = querySnapshot.docs.map((doc) => doc.data());
       //console.log(data);
       //data.push(dT);
-      this.setState({ sensorFirebaseData: data });
+      this.setState({ sensorFirebaseData: data, isLoading: false });
     });
     //.then();
 
     //console.log(data);
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
-    const { sensorFirebaseData } = this.state;
-    if (!sensorFirebaseData) {
+    const { sensorFirebaseData, isLoading } = this.state;
+
+    // timeout 5s to refresh page
+    setInterval(function () {
+      window.location.reload();
+    }, 300000);
+
+    //console.log(sensorFirebaseData);
+
+    if (isLoading === true) {
       return (
         <div className="container">
           <Preloader />
@@ -34,7 +52,11 @@ export default class ElWatch extends Component {
     }
     return (
       <div className="container">
-        <Table data={sensorFirebaseData} />
+        {sensorFirebaseData && sensorFirebaseData.length ? (
+          <Table data={sensorFirebaseData} />
+        ) : (
+          <p className="flow-text">No data available!</p>
+        )}
       </div>
     );
   }
