@@ -17,6 +17,10 @@ footer {
   padding-left: 300px;
 }
 
+.canvas-container {
+  height: 60vh;
+}
+
 @media only screen and (max-width: 992px) {
   header,
   main,
@@ -26,5 +30,9 @@ footer {
 
   main {
     min-height: calc(100vh - 135px);
+  }
+
+  .canvas-container {
+    height: 60vh;
   }
 }

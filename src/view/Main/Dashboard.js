@@ -90,6 +90,8 @@ export default class Dashboard extends Component {
   render() {
     const { sensorActive, isLoading } = this.state;
 
+    console.log(this.state.elData);
+
     if (isLoading === true) {
       return <Preloader />;
     }
@@ -98,20 +100,20 @@ export default class Dashboard extends Component {
       <section className="dashboard">
         <div className="row">
           {sensorActive === true ? (
-            //green card
-            <div className="col s12 center-align">
-              <div className="card green darken-1 z-depth-4">
-                <div className="card-content white-text">
-                  <span className="card-title">Table is in use!</span>
-                </div>
-              </div>
-            </div>
-          ) : (
             // red card
             <div className="col s12 center-align">
               <div className="card red darken-1 z-depth-4">
                 <div className="card-content white-text">
-                  <span className="card-title">Table is not in use!</span>
+                  <span className="card-title">Table Unavialable!</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            //green card
+            <div className="col s12 center-align">
+              <div className="card green darken-1 z-depth-4">
+                <div className="card-content white-text">
+                  <span className="card-title">Table Aailable!</span>
                 </div>
               </div>
             </div>
