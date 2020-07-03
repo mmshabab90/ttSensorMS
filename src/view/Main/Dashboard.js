@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Preloader from "../../components/UI/Preloader";
 import { db } from "../../API/FirebaseConfig";
-import ChartComponent from "../../components/Charts/ChartComponent";
+import RealTimeChart from "../../components/Charts/RealTimeChart";
 
 const elWatchCollection = "elWatchData";
 
@@ -12,6 +12,7 @@ export default class Dashboard extends Component {
       elData: [],
       sensorActive: false,
       isLoading: false,
+      timestamps: null,
     };
   }
 
@@ -56,10 +57,14 @@ export default class Dashboard extends Component {
     const { elData } = this.state;
     const timestampNow = new Date();
     const ts = [];
+    const tsI = [];
 
     elData.forEach((item) => {
       ts.push(item.timestamp);
+      tsI.push(parseInt(item.timestamp));
     });
+
+    this.setState({ timestamps: tsI });
 
     const lastTsItem = parseInt(ts[ts.length - 1]);
     const elTimestamp = new Date(lastTsItem);
@@ -88,9 +93,11 @@ export default class Dashboard extends Component {
   }
 
   render() {
-    const { sensorActive, isLoading } = this.state;
+    const { sensorActive, isLoading, timestamps, elData } = this.state;
 
-    console.log(this.state.elData);
+    // console.log(timestamps);
+
+    elData.forEach((item) => {});
 
     if (isLoading === true) {
       return <Preloader />;
@@ -119,25 +126,16 @@ export default class Dashboard extends Component {
             </div>
           )}
 
-          {/* Chart Vibration Basic 1 */}
-          <div className="col s12 m6 l6 center-align">
-            <div className="card z-depth-2">
-              <div className="card-content">
-                <span className="card-title">Sensor 1 Data</span>
-                <ChartComponent />
+          {/* Real time chart section */}
+          {timestamps !== null && timestamps.length > 0 ? (
+            <div className="col s12 m12 l12 center-align">
+              <div className="card z-depth-2">
+                <div className="card-content">
+                  <RealTimeChart elData={elData} />
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Chart Vibration Basic 2 */}
-          <div className="col s12 m6 l6 center-align">
-            <div className="card z-depth-2">
-              <div className="card-content">
-                <span className="card-title">Sensor 2 Data</span>
-                <ChartComponent />
-              </div>
-            </div>
-          </div>
+          ) : null}
         </div>
       </section>
     );
