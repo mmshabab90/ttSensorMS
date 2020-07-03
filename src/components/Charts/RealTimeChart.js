@@ -19,9 +19,9 @@ const RealTimeChart = ({ elData }) => {
     timestamps.push(parseInt(data.timestamp));
   });
 
-  console.log(s1Data);
-  console.log(s2Data);
-  console.log(timestamps);
+  //console.log(s1Data);
+  //console.log(s2Data);
+  //console.log(timestamps);
 
   const series = [
     {
