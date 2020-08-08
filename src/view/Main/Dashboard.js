@@ -10,6 +10,7 @@ export default class Dashboard extends Component {
     super(props);
     this.state = {
       elData: [],
+      latestTenData: [],
       sensorActive: false,
       isLoading: false,
       timestamps: null,
@@ -41,13 +42,22 @@ export default class Dashboard extends Component {
 
     let data = [];
     try {
-      await db.collection(elWatchCollection).onSnapshot((querySnapshot) => {
-        data = querySnapshot.docs.map((doc) => doc.data());
-        //console.log(data);
-        //data.push(dT);
-        this.setState({ elData: data, isLoading: false });
-        this.computeTime();
-      });
+      await db
+        .collection(elWatchCollection)
+        .onSnapshot((querySnapshot) => {
+          data = querySnapshot.docs.map((doc) => doc.data());
+          //console.log(data);
+          //data.push(dT);
+          this.setState({ elData: data, isLoading: false });
+          this.computeTime();
+        })
+        .then(() => {
+          this.setState({
+            latestTenData: this.state.elData.slice(
+              Math.max(this.state.elData.length - 10, 0)
+            ),
+          });
+        });
     } catch (error) {
       console.log("Couldn't connect to database | Error: " + error);
     }
@@ -64,7 +74,10 @@ export default class Dashboard extends Component {
       tsI.push(parseInt(item.timestamp));
     });
 
-    this.setState({ timestamps: tsI });
+    this.setState({
+      timestamps: tsI,
+      latestTenData: elData.slice(Math.max(elData.length - 20, 0)),
+    });
 
     const lastTsItem = parseInt(ts[ts.length - 1]);
     const elTimestamp = new Date(lastTsItem);
@@ -93,11 +106,9 @@ export default class Dashboard extends Component {
   }
 
   render() {
-    const { sensorActive, isLoading, timestamps, elData } = this.state;
+    const { sensorActive, isLoading, timestamps, latestTenData } = this.state;
 
     // console.log(timestamps);
-
-    elData.forEach((item) => {});
 
     if (isLoading === true) {
       return <Preloader />;
@@ -127,15 +138,18 @@ export default class Dashboard extends Component {
           )}
 
           {/* Real time chart section */}
-          {timestamps !== null && timestamps.length > 0 ? (
+          {timestamps && timestamps.length > 0 ? (
             <div className="col s12 m12 l12 center-align">
               <div className="card z-depth-2">
                 <div className="card-content">
-                  <RealTimeChart elData={elData} />
+                  <span className="card-title">elWatch Sensor Data Chart</span>
+                  <RealTimeChart elData={latestTenData} />
                 </div>
               </div>
             </div>
           ) : null}
+
+          {/* Chart JS Chart section */}
         </div>
       </section>
     );
