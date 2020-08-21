@@ -19,6 +19,12 @@ export default class Dashboard extends Component {
 
   _isMounted = false;
   async componentDidMount() {
+
+    window.navigator.geolocation.getCurrentPosition(
+      position => console.log(position),
+      err => console.log(err)
+    )
+
     this.setState({ isLoading: true });
     this._isMounted = true;
 
